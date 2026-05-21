@@ -1,0 +1,21 @@
+# Backup documents
+*_BACKUP.docx
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.env
+venv/
+env/
+
+# Claude settings
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
