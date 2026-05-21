@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Risco LTVTA — Laminopatias</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #F0F4F8;
+      color: #1A2332;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #0D47A1 0%, #1565C0 60%, #1976D2 100%);
+      color: white;
+      padding: 28px 24px 22px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(13,71,161,0.3);
+    }
+    header h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.3;
+    }
+    header p {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      opacity: 0.88;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 0.78rem;
+      margin-top: 10px;
+    }
+
+    /* ── Layout ──────────────────────────────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0D47A1;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #E3F2FD;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Grid de variáveis ───────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-1 { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Toggle switch ───────────────────────────────────────────── */
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border: 1.5px solid #E3E8F0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .toggle-item:hover { border-color: #90CAF9; background: #F8FBFF; }
+    .toggle-item.active {
+      border-color: #1565C0;
+      background: #EBF2FF;
+    }
+
+    .toggle-label {
+      flex: 1;
+    }
+    .toggle-label strong {
+      display: block;
+      font-size: 0.9rem;
+      color: #1A2332;
+    }
+    .toggle-label span {
+      font-size: 0.77rem;
+      color: #607D8B;
+      margin-top: 2px;
+    }
+
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-left: 12px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider-sw {
+      position: absolute;
+      inset: 0;
+      background: #CFD8DC;
+      border-radius: 24px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .slider-sw::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      left: 3px; bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .switch input:checked + .slider-sw { background: #1565C0; }
+    .switch input:checked + .slider-sw::before { transform: translateX(20px); }
+
+    /* ── Slider contínuo ─────────────────────────────────────────── */
+    .slider-item {
+      padding: 14px 14px;
+      border: 1.5px solid #E3E8F0;
+      border-radius: 10px;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .slider-header strong { font-size: 0.9rem; }
+    .slider-header span { font-size: 0.77rem; color: #607D8B; }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slider-row input[type="range"] {
+      flex: 1;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #E3E8F0;
+      border-radius: 4px;
+      outline: none;
+    }
+    .slider-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      background: #1565C0;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(21,101,192,0.4);
+    }
+    .slider-row input[type="number"] {
+      width: 72px;
+      padding: 6px 8px;
+      border: 1.5px solid #CFD8DC;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      text-align: center;
+      outline: none;
+      color: #1A2332;
+    }
+    .slider-row input[type="number"]:focus { border-color: #1565C0; }
+    .slider-bounds {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #90A4AE;
+      margin-top: 4px;
+    }
+
+    /* ── Botão calcular ──────────────────────────────────────────── */
+    .btn-calcular {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #0D47A1, #1976D2);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(13,71,161,0.35);
+      margin-top: 4px;
+    }
+    .btn-calcular:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-calcular:active { transform: translateY(0); }
+    .btn-calcular:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ── Resultados ──────────────────────────────────────────────── */
+    #resultados { display: none; }
+    .resultado-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 580px) {
+      .resultado-grid { grid-template-columns: 1fr; }
+    }
+
+    .resultado-card {
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid transparent;
+      position: relative;
+    }
+    .resultado-card.wahbi {
+      background: #F3F8FD;
+      border-color: #90CAF9;
+    }
+    .resultado-card.expandido {
+      background: #F3FDF6;
+      border-color: #A5D6A7;
+    }
+
+    .resultado-card .modelo-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #546E7A;
+      margin-bottom: 6px;
+    }
+    .resultado-card .modelo-nome {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1A2332;
+      margin-bottom: 14px;
+    }
+
+    .risco-valor {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .risco-unidade {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #607D8B;
+      margin-bottom: 10px;
+    }
+    .risco-categoria {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Gauge bar */
+    .gauge-wrap {
+      margin: 10px 0 14px;
+    }
+    .gauge-track {
+      height: 8px;
+      border-radius: 4px;
+      background: #E3E8F0;
+      overflow: hidden;
+    }
+    .gauge-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+    .gauge-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #90A4AE;
+      margin-top: 3px;
+    }
+
+    /* Delta card */
+    .delta-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      background: #FFF8E1;
+      border: 1.5px solid #FFE082;
+      border-radius: 10px;
+      margin-bottom: 0;
+    }
+    .delta-icon { font-size: 1.8rem; }
+    .delta-texto strong { font-size: 0.95rem; color: #1A2332; }
+    .delta-texto p { font-size: 0.82rem; color: #607D8B; margin-top: 3px; }
+
+    /* ── Aviso ───────────────────────────────────────────────────── */
+    .aviso {
+      background: #FFF3E0;
+      border-left: 4px solid #FB8C00;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 0.82rem;
+      color: #5D4037;
+      line-height: 1.5;
+    }
+
+    /* ── Erro ────────────────────────────────────────────────────── */
+    #erro-msg {
+      display: none;
+      background: #FFEBEE;
+      border-left: 4px solid #C62828;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #B71C1C;
+      margin-top: 12px;
+    }
+
+    /* ── Loading ─────────────────────────────────────────────────── */
+    .spinner {
+      display: none;
+      width: 22px; height: 22px;
+      border: 3px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.78rem;
+      color: #90A4AE;
+    }
+    footer a { color: #1565C0; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Calculadora de Risco de LTVTA em Laminopatias</h1>
+  <p>Expansão do Modelo Preditivo de Wahbi et al. (2019) com LGE por RMC e Duração do QRS</p>
+  <span class="badge">Projeto Integrador III — FATEC Jundiaí · Ciência de Dados · 2026</span>
+</header>
+
+<main>
+
+  <!-- Variáveis binárias -->
+  <div class="card">
+    <h2>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D47A1" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Dados Clínicos — Variáveis Binárias
+    </h2>
+    <div class="grid-2">
+
+      <label class="toggle-item" id="label-sexo">
+        <div class="toggle-label">
+          <strong>Sexo masculino</strong>
+          <span>HR 2,75 | Wahbi et al.</span>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="sexo_masculino" />
+          <span class="slider-sw"></span>
+        </div>
+      </label>
+
+      <label class="toggle-item" id="label-mutacao">
+        <div class="toggle-label">
+          <strong>Mutação não-missense LMNA</strong>
+          <span>HR 2,48 | Wahbi et al.</span>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="mutacao_nao_missense" />
+          <span class="slider-sw"></span>
+        </div>
+      </label>
+
+      <label class="toggle-item" id="label-bav">
+        <div class="toggle-label">
+          <strong>Bloqueio AV ≥ 1º grau</strong>
+          <span>HR 2,59 | Wahbi et al.</span>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="bloqueio_av" />
+          <span class="slider-sw"></span>
+        </div>
+      </label>
+
+      <label class="toggle-item" id="label-tvns">
+        <div class="toggle-label">
+          <strong>TVNS</strong>
+          <span>HR 2,63 | Wahbi et al.</span>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="tvns" />
+          <span class="slider-sw"></span>
+        </div>
+      </label>
+
+      <label class="toggle-item" id="label-lge">
+        <div class="toggle-label">
+          <strong>LGE presente (RMC)</strong>
+          <span>HR 2,26 | Nova variável proposta ★</span>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="lge_presente" />
+          <span class="slider-sw"></span>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- Variáveis contínuas -->
+  <div class="card">
+    <h2>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D47A1" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Dados Clínicos — Variáveis Contínuas
+    </h2>
+    <div class="grid-1">
+
+      <div class="slider-item">
+        <div class="slider-header">
+          <strong>Fração de Ejeção do VE (FEVE)</strong>
+          <span>HR 1,56 por 10% de queda | Wahbi et al.</span>
+        </div>
+        <div class="slider-row">
+          <input type="range" id="feve_range" min="15" max="75" step="1" value="48" />
+          <input type="number" id="feve_num" min="15" max="75" step="1" value="48" />
+          <span style="font-size:0.82rem;color:#607D8B;white-space:nowrap">%</span>
+        </div>
+        <div class="slider-bounds"><span>15%</span><span>75%</span></div>
+      </div>
+
+      <div class="slider-item">
+        <div class="slider-header">
+          <strong>Duração do QRS (ECG de superfície)</strong>
+          <span>HR 1,23 por 10 ms | Nova variável proposta ★</span>
+        </div>
+        <div class="slider-row">
+          <input type="range" id="qrs_range" min="80" max="220" step="1" value="115" />
+          <input type="number" id="qrs_num" min="80" max="220" step="1" value="115" />
+          <span style="font-size:0.82rem;color:#607D8B;white-space:nowrap">ms</span>
+        </div>
+        <div class="slider-bounds"><span>80 ms</span><span>220 ms</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Botão -->
+  <div class="card" style="padding:16px;">
+    <button class="btn-calcular" id="btn-calcular" onclick="calcular()">
+      <span id="btn-texto">Calcular Risco de LTVTA em 5 anos</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+    <div id="erro-msg"></div>
+  </div>
+
+  <!-- Resultados -->
+  <div id="resultados">
+    <div class="card">
+      <h2>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D47A1" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Resultado — Risco de LTVTA em 5 Anos
+      </h2>
+
+      <div class="resultado-grid">
+        <!-- Modelo Wahbi -->
+        <div class="resultado-card wahbi">
+          <div class="modelo-label">Modelo Original</div>
+          <div class="modelo-nome">Wahbi et al. (2019) — 5 variáveis</div>
+          <div class="risco-valor" id="val-wahbi" style="color:#1565C0">—</div>
+          <div class="risco-unidade">% em 5 anos</div>
+          <div class="gauge-wrap">
+            <div class="gauge-track">
+              <div class="gauge-fill" id="gauge-wahbi" style="width:0%;background:#1565C0;"></div>
+            </div>
+            <div class="gauge-label"><span>0%</span><span>30%+</span></div>
+          </div>
+          <span class="risco-categoria" id="cat-wahbi" style="background:#90A4AE;">—</span>
+        </div>
+
+        <!-- Modelo Expandido -->
+        <div class="resultado-card expandido">
+          <div class="modelo-label">Modelo Expandido ★</div>
+          <div class="modelo-nome">+ LGE por RMC + Duração do QRS — 7 variáveis</div>
+          <div class="risco-valor" id="val-exp" style="color:#2E7D32">—</div>
+          <div class="risco-unidade">% em 5 anos</div>
+          <div class="gauge-wrap">
+            <div class="gauge-track">
+              <div class="gauge-fill" id="gauge-exp" style="width:0%;background:#2E7D32;"></div>
+            </div>
+            <div class="gauge-label"><span>0%</span><span>30%+</span></div>
+          </div>
+          <span class="risco-categoria" id="cat-exp" style="background:#90A4AE;">—</span>
+        </div>
+      </div>
+
+      <!-- Delta -->
+      <div class="delta-card" id="delta-card">
+        <div class="delta-icon">📊</div>
+        <div class="delta-texto">
+          <strong id="delta-texto-strong">—</strong>
+          <p>Diferença entre o modelo expandido e o modelo original de Wahbi et al. C-index: 0,768 → 0,794 (+2,6 pp)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aviso -->
+    <div class="card" style="padding:16px;">
+      <div class="aviso">
+        <strong>Aviso importante:</strong> Esta calculadora é uma ferramenta de pesquisa baseada em simulação paramétrica com dataset sintético (n=600). Os coeficientes foram estimados a partir de dados simulados com base nos parâmetros de Wahbi et al. (2019) e hipóteses de LGE e QRS descritas no artigo. <strong>Não deve ser utilizada para decisões clínicas reais.</strong> Consulte sempre um cardiologista especializado.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Alexandre da Fonseca · Paloma de Almeida Taboada · Orientador: Prof. Argemiro Pentian Junior<br/>
+  FATEC Dep. Ary Fossen Jundiaí — Ciência de Dados — 2026 |
+  <a href="https://github.com/alefonsecabb/laminopatias-modelo-preditivo" target="_blank">GitHub</a> |
+  <a href="https://colab.research.google.com/drive/1VNMpUuOhFXHxijGW3hS_2do3I1Wfg67v?usp=sharing" target="_blank">Google Colab</a>
+</footer>
+
+<script>
+  // Sincronizar sliders com inputs numéricos
+  function syncSlider(rangeId, numId) {
+    const range = document.getElementById(rangeId);
+    const num   = document.getElementById(numId);
+    range.addEventListener('input', () => { num.value = range.value; });
+    num.addEventListener('input', () => {
+      const v = Math.min(Math.max(parseFloat(num.value) || parseFloat(range.min), parseFloat(range.min)), parseFloat(range.max));
+      range.value = v;
+      num.value   = v;
+    });
+  }
+  syncSlider('feve_range', 'feve_num');
+  syncSlider('qrs_range',  'qrs_num');
+
+  // Visual dos toggles
+  document.querySelectorAll('.toggle-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('.toggle-item').classList.toggle('active', cb.checked);
+    });
+  });
+
+  // ── Calcular ────────────────────────────────────────────────────
+  async function calcular() {
+    const btn     = document.getElementById('btn-calcular');
+    const texto   = document.getElementById('btn-texto');
+    const spinner = document.getElementById('spinner');
+    const erroEl  = document.getElementById('erro-msg');
+
+    btn.disabled   = true;
+    texto.style.display  = 'none';
+    spinner.style.display = 'block';
+    erroEl.style.display  = 'none';
+
+    const payload = {
+      sexo_masculino:       document.getElementById('sexo_masculino').checked       ? 1 : 0,
+      mutacao_nao_missense: document.getElementById('mutacao_nao_missense').checked ? 1 : 0,
+      bloqueio_av:          document.getElementById('bloqueio_av').checked          ? 1 : 0,
+      tvns:                 document.getElementById('tvns').checked                 ? 1 : 0,
+      lge_presente:         document.getElementById('lge_presente').checked         ? 1 : 0,
+      feve:                 parseFloat(document.getElementById('feve_num').value),
+      duracao_qrs:          parseFloat(document.getElementById('qrs_num').value),
+    };
+
+    try {
+      const resp = await fetch('/api/prever', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        throw new Error(data.erro || 'Erro ao calcular o risco.');
+      }
+
+      exibirResultado(data);
+    } catch (err) {
+      erroEl.textContent  = err.message;
+      erroEl.style.display = 'block';
+    } finally {
+      btn.disabled          = false;
+      texto.style.display   = 'inline';
+      spinner.style.display = 'none';
+    }
+  }
+
+  function exibirResultado(data) {
+    document.getElementById('resultados').style.display = 'block';
+    document.getElementById('resultados').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Wahbi
+    const rw  = data.wahbi.risco;
+    const catW = data.wahbi.categoria;
+    document.getElementById('val-wahbi').textContent = rw.toFixed(1);
+    document.getElementById('val-wahbi').style.color = catW.cor;
+    document.getElementById('cat-wahbi').textContent = catW.label;
+    document.getElementById('cat-wahbi').style.background = catW.cor;
+    document.getElementById('gauge-wahbi').style.width      = Math.min(rw / 30 * 100, 100) + '%';
+    document.getElementById('gauge-wahbi').style.background = catW.cor;
+
+    // Expandido
+    const re   = data.expandido.risco;
+    const catE = data.expandido.categoria;
+    document.getElementById('val-exp').textContent = re.toFixed(1);
+    document.getElementById('val-exp').style.color = catE.cor;
+    document.getElementById('cat-exp').textContent = catE.label;
+    document.getElementById('cat-exp').style.background = catE.cor;
+    document.getElementById('gauge-exp').style.width      = Math.min(re / 30 * 100, 100) + '%';
+    document.getElementById('gauge-exp').style.background = catE.cor;
+
+    // Delta
+    const delta = data.delta;
+    const sign  = delta >= 0 ? '+' : '';
+    document.getElementById('delta-texto-strong').textContent =
+      `Diferença de risco absoluto: ${sign}${delta.toFixed(1)} pp (modelo expandido vs. Wahbi original)`;
+  }
+</script>
+</body>
+</html>
