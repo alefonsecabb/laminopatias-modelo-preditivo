@@ -47,7 +47,7 @@ def calcular_sobrevida_basal(coefs: dict) -> float:
 
 
 def prever_risco(coefs: dict, dados_paciente: dict) -> float:
-    """Retorna risco de LTVTA em 5 anos (0–1) via modelo de Cox."""
+    """Retorna risco de Arritmia com risco de morte em 5 anos (0–1) via modelo de Cox."""
     lp = sum(coefs[k] * dados_paciente[k] for k in coefs)
     s0 = calcular_sobrevida_basal(coefs)
     risco = 1.0 - s0 ** math.exp(lp)
