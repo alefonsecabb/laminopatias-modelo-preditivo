@@ -1,4 +1,4 @@
-# Expansão do Modelo Preditivo de Wahbi et al. para LTVTA em Laminopatias
+# Expansão do Modelo Preditivo de Wahbi et al. para Arritmias Ventriculares com risco de morte em Laminopatias
 
 > **Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS**
 
