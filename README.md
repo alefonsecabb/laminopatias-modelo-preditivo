@@ -2,8 +2,8 @@
 
 > **Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS**
 
-**Autores:** Alexandre da Fonseca · Paloma de Almeida Taboada  
-**Orientador:** Prof. Argemiro Pentian Junior  
+**Autor:** Alexandre da Fonseca 
+**Orientador:** Prof. Leonardo de Lellis Rossi 
 **Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados  
 **Disciplina:** Projeto Integrador IV — 6º Semestre (2026)
 
