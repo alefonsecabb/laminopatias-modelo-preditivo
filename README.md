@@ -5,7 +5,7 @@
 **Autores:** Alexandre da Fonseca · Paloma de Almeida Taboada  
 **Orientador:** Prof. Argemiro Pentian Junior  
 **Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados  
-**Disciplina:** Projeto Integrador III — 5º Semestre (2026)
+**Disciplina:** Projeto Integrador IV — 6º Semestre (2026)
 
 ---
 
@@ -53,7 +53,7 @@ O notebook `analise_modelo_laminopatias.ipynb` implementa:
 ### Dataset Sintético
 - **600 pacientes** simulados com parâmetros calibrados a partir dos dados de Wahbi et al. (2019) e literatura específica de laminopatias
 - Seed fixo (`np.random.seed(42)`) para reprodutibilidade total
-- Riscos competidores: LTVTA (~13%), óbito por outras causas (~10%), censurado (~77%)
+- Riscos competidores: Arritmia Ventricular com risco de morte (~13%), óbito por outras causas (~10%), censurado (~77%)
 
 ### Variáveis do dataset
 
