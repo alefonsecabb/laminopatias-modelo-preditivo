@@ -1,11 +1,11 @@
 # Roteiro da Apresentação — 15 minutos
-**Expansão do Modelo Preditivo para Taquiarritmias Ventriculares em Laminopatias**
+**Expansão do Modelo Preditivo para Taquiarritmias Ventriculares Ameaçadoras à Vida em Laminopatias**
 
 ---
 
 ## Slide 1 — Capa `[0:00 – 0:30]`
 
-> "Bom dia/Boa tarde a todos. Meu nome é Alexandre, e hoje vou apresentar o trabalho que desenvolvemos junto à Paloma no Projeto Integrador III, mas sob a ótica de Aprendizado de Máquina.
+> "Bom dia/Boa tarde a todos. Meu nome é Alexandre, e hoje vou apresentar o trabalho para trabalho de conclusão de curso, sob a ótica de Aprendizado de Máquina.
 > O título é um pouco técnico, então vou começar explicando o problema clínico por trás disso."
 
 ---
