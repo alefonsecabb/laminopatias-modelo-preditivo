@@ -3,7 +3,7 @@
 > **Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS**
 
 **Autor:** Alexandre da Fonseca 
-**Orientador:** Prof. Leonardo de Lellis Rossi 
+**Orientador:** Prof. Dr. Humberto Zanetti
 **Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados  
 **Disciplina:** Projeto Integrador IV — 6º Semestre (2026)
 
@@ -11,7 +11,7 @@
 
 ## Sobre o Projeto
 
-Este repositório contém o artigo científico e a análise computacional desenvolvidos como Projeto Integrador III, propondo a **expansão do modelo preditivo de Wahbi et al. (2019)** para risco de Taquiarritmia Ventricular Ameaçadora à Vida (LTVTA) em portadores de mutações no gene **LMNA** (laminopatias).
+Este repositório contém o artigo científico e a análise computacional desenvolvidos como Projeto Integrador III, propondo a **expansão do modelo preditivo de Wahbi et al. (2019)** para risco de Taquiarritmia Ventricular Ameaçadora à Vida (TVAV) em portadores de mutações no gene **LMNA** (laminopatias).
 
 ### Contexto Clínico
 
