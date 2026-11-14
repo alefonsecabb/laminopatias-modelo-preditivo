@@ -1,4 +1,4 @@
-# Expansão do Modelo Preditivo de Wahbi et al. para Arritmias Ventriculares com risco de morte em Laminopatias
+# Expansão do Modelo Preditivo de Wahbi et al. para Arritmias Ventriculares Ameaçadoras à Vida (TVAV) em Laminopatias
 
 > **Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS**
 
@@ -11,7 +11,7 @@
 
 ## Sobre o Projeto
 
-Este repositório contém o artigo científico e a análise computacional desenvolvidos como Projeto Integrador III, propondo a **expansão do modelo preditivo de Wahbi et al. (2019)** para risco de Taquiarritmia Ventricular Ameaçadora à Vida (TVAV) em portadores de mutações no gene **LMNA** (laminopatias).
+Este repositório contém o artigo científico e a análise computacional desenvolvidos como trabalho de conclusão de curso, propondo a **expansão do modelo preditivo de Wahbi et al. (2019)** para risco de Taquiarritmia Ventricular Ameaçadora à Vida (TVAV) em portadores de mutações no gene **LMNA** (laminopatias).
 
 ### Contexto Clínico
 
