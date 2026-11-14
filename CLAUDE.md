@@ -8,17 +8,20 @@ Este arquivo documenta todo o histórico de trabalho realizado com Claude Code n
 
 **Título:** Expansão do Modelo Preditivo de Wahbi et al. para Taquiarritmias Ventriculares em Laminopatias: Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS
 
-**Autores:** Alexandre da Fonseca · Paloma de Almeida Taboada  
-**Orientador:** Prof. Argemiro Pentian Junior  
+**Autor:** Alexandre da Fonseca  
+**Orientador:** Prof. Dr. Humberto Zanetti  
 **Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados  
-**Disciplina:** Projeto Integrador III — 5º Semestre (2026)  
+**Disciplina:** Projeto Integrador IV — 6º Semestre (2026) · Trabalho de Conclusão de Curso  
 **Repositório GitHub:** https://github.com/alefonsecabb/laminopatias-modelo-preditivo  
+**Site (calculadora):** https://alefonsecabb.github.io/laminopatias-modelo-preditivo/  
+
+> Histórico: a versão inicial (Projeto Integrador III, 5º semestre) teve coautoria de Paloma de Almeida Taboada e orientação do Prof. Argemiro Pentian Junior — os nomes dos arquivos `.docx` ainda refletem essa fase.
 
 ---
 
 ## Resumo da Proposta do Artigo
 
-O artigo propõe expandir o modelo Fine-Gray de Wahbi et al. (2019) — que estratifica risco de Taquiarritmia Ventricular Ameaçadora à Vida (LTVTA) em portadores de mutações no gene LMNA — adicionando duas variáveis não contempladas no modelo original:
+O artigo propõe expandir o modelo Fine-Gray de Wahbi et al. (2019) — que estratifica risco de Taquiarritmia Ventricular Ameaçadora à Vida (TVAV; antes chamada LTVTA — sigla ainda usada no notebook/dataset) em portadores de mutações no gene LMNA — adicionando duas variáveis não contempladas no modelo original:
 
 | Nova variável | Tipo | HR hipotético |
 |---|---|---|
@@ -51,6 +54,12 @@ PROJETO_INTEGRADOR_III/
 ├── Artigo Projeto Integrador 3  - Alexandre_Paloma_BACKUP.docx ← backup antes das correções (excluído do git)
 ├── Artigo Projeto Integrador 3  - Alexandre_Paloma_FINAL.docx  ← versão com todas as correções (sem seção 4.4)
 ├── Artigo Projeto Integrador 3  - Alexandre_Paloma_FINAL_v2.docx ← VERSÃO MAIS ATUALIZADA (com seção 4.4)
+│
+├── index.html                                         ← SITE publicado no GitHub Pages (calculadora estática)
+├── docs/index.html                                    ← cópia idêntica de index.html (manter sincronizada)
+├── .nojekyll, docs/.nojekyll                          ← desativam Jekyll no GitHub Pages
+├── web/api.py, web/templates/index.html               ← versão Flask antiga (NÃO é servida pelo Pages)
+├── requirements.txt                                   ← dependências Python
 │
 ├── relatorio_analise_laminopatias_wahbi.docx          ← relatório de avaliação do orientador
 └── wahbi-et-al-2019-(...).pdf                         ← artigo original de Wahbi et al. (referência)
@@ -171,6 +180,17 @@ Inserida após a Seção 4.3 (antes da Seção 5), como `Heading 2` com estilo `
 
 ---
 
+### 6. Site — Calculadora de Risco (GitHub Pages)
+
+- **URL:** https://alefonsecabb.github.io/laminopatias-modelo-preditivo/
+- **Arquivo servido:** `index.html` da raiz — página única (HTML + CSS + JS), sem build nem backend.
+  - `<style>` no topo; `<header>`/`<h1>` com título, autor e selo; cards de entrada (binárias e contínuas); resultados; tabela de coeficientes; aviso; `<footer>` com orientador e links GitHub/Colab.
+  - `<script>` no final: `COEFS_WAHBI`, `COEFS_EXP`, `MEDIAS`, `P_MEDIA` e funções `sobrevidaBasal`, `risco5a`, `categoria`, `sync`, `calcular`.
+- **Fluxo de alteração:** editar `index.html` (raiz) → copiar para `docs/index.html` → commit → `git push origin main` → site atualiza em ~1–2 min (Ctrl+F5 para conferir).
+- **Nov/2026:** título alterado para "Calculadora de Risco de Taquiarritmias Ventriculares Ameaçadoras à Vida (TVAV) em Laminopatias", selo para "Trabalho de Conclusão de Curso", orientador para Prof. Dr. Humberto Zanetti (commit `666a4cb`).
+
+---
+
 ## Pendências e Pontos de Atenção
 
 - O arquivo `_FINAL.docx` e o `_FINAL_v2.docx` coexistem. **O canônico é o `_v2`**. Em sessões futuras, consolidar em um único arquivo final se necessário.
@@ -178,6 +198,8 @@ Inserida após a Seção 4.3 (antes da Seção 5), como `Heading 2` com estilo `
 - A pasta `.claude/` (settings locais) também está excluída do git.
 - As hipóteses de C-index > 0,82 e NRI ≥ 10% **não foram confirmadas** na simulação sintética — isso está documentado como limitação do poder amostral (n=77 eventos). Não alterar o texto das hipóteses na Seção 4.2.
 - O estilo Heading 2 no docx usa o nome interno `Ttulo2` (localização PT-BR do Word), não `Heading2`. Usar sempre `Ttulo2` ao manipular via python-docx.
+- **Site:** alterações feitas só em `docs/index.html` ou `web/templates/index.html` NÃO aparecem no site — o GitHub Pages serve o `index.html` da raiz. Sempre manter raiz e `docs/` idênticos.
+- O repositório remoto às vezes recebe commits feitos direto pelo GitHub (ex.: README). Antes de `push`, rodar `git pull --rebase origin main`.
 - Para editar o Word via python-docx com este caminho (contém `º`), copiar o arquivo para um diretório sem caracteres especiais, editar, e salvar de volta.
 
 ---
