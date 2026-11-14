@@ -2,10 +2,10 @@
 
 > **Proposta de Inclusão de Fibrose Miocárdica por RMC e Duração do QRS**
 
-**Autor:** Alexandre da Fonseca 
-**Orientador:** Prof. Dr. Humberto Zanetti
-**Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados  
-**Disciplina:** Projeto Integrador IV — 6º Semestre (2026)
+**Autor:** Alexandre da Fonseca   
+**Orientador:** Prof. Dr. Humberto Zanetti  
+**Instituição:** FATEC Dep. Ary Fossen Jundiaí — Curso de Ciência de Dados      
+**Disciplina:** TG I e TG II — 6º Semestre (2026)  
 
 ---
 
